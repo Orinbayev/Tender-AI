@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}TenderAI.uz — AI bilan tender ariza yozing{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding: 60px 0 40px;">
+    <h1 style="font-size:42px; color:#1a56db; margin-bottom:16px;">
+        Tender ariza — 5 daqiqada
+    </h1>
+    <p style="font-size:20px; color:#555; max-width:600px; margin:0 auto 32px;">
+        AI sizning kompaniya ma'lumotlaringiz asosida professional tender hujjatini avtomatik yozib beradi.
+    </p>
+    <a href="/create/" class="btn" style="font-size:18px; padding:16px 40px;">
+        Boshlash →
+    </a>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:40px;">
+    <div class="card" style="text-align:center;">
+        <div style="font-size:36px; margin-bottom:12px;">📋</div>
+        <h3 style="margin-bottom:8px;">Ma'lumot kiriting</h3>
+        <p style="color:#666;">Kompaniya va tender haqida asosiy ma'lumotlarni yozing</p>
+    </div>
+    <div class="card" style="text-align:center;">
+        <div style="font-size:36px; margin-bottom:12px;">🤖</div>
+        <h3 style="margin-bottom:8px;">AI yozadi</h3>
+        <p style="color:#666;">Sun'iy intellekt 5 daqiqada professional ariza tayyorlaydi</p>
+    </div>
+    <div class="card" style="text-align:center;">
+        <div style="font-size:36px; margin-bottom:12px;">📄</div>
+        <h3 style="margin-bottom:8px;">PDF yuklab oling</h3>
+        <p style="color:#666;">Tayyor hujjatni yuklab oling va xarid.uzex.uz ga yuboring</p>
+    </div>
+</div>
+{% endblock %}

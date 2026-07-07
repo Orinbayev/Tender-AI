@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Ariza yaratish — TenderAI.uz{% endblock %}
+
+{% block content %}
+
+<!-- Loading overlay -->
+<div id="loading-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10,20,50,0.85); z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:white;">
+        <div style="width:64px; height:64px; border:5px solid rgba(255,255,255,0.2); border-top-color:#ffffff; border-radius:50%; animation:spin 0.9s linear infinite; margin:0 auto 28px;"></div>
+        <h2 style="font-size:22px; margin-bottom:12px;">AI hujjat yozyapti...</h2>
+        <p style="color:#a0b4d6; font-size:16px;" id="loading-msg">Tender ma'lumotlari o'qilmoqda</p>
+        <div style="margin-top:28px; display:flex; gap:8px; justify-content:center;">
+            <div class="dot" style="animation-delay:0s"></div>
+            <div class="dot" style="animation-delay:0.2s"></div>
+            <div class="dot" style="animation-delay:0.4s"></div>
+        </div>
+        <p style="color:#6b8ab0; font-size:13px; margin-top:32px;">Iltimos sahifani yopmang — 15-30 soniya kuting</p>
+    </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity:0.4; }
+    40% { transform: scale(1); opacity:1; }
+}
+.dot {
+    width: 10px; height: 10px;
+    background: #4a90e2;
+    border-radius: 50%;
+    display: inline-block;
+    animation: bounce 1.2s infinite ease-in-out;
+}
+</style>
+
+<div class="card">
+    <h2 style="margin-bottom:8px; color:#1a56db;">Tender arizasi yaratish</h2>
+    <p style="color:#666; margin-bottom:28px;">Quyidagi ma'lumotlarni to'ldiring — AI hujjatni avtomatik yozadi.</p>
+
+    <form method="POST" id="tender-form">
+        {% csrf_token %}
+
+        <h3 style="margin-bottom:16px; color:#333; border-bottom:2px solid #eef0f4; padding-bottom:8px;">
+            Kompaniya ma'lumotlari
+        </h3>
+
+        <div style="margin-bottom:18px;">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">Kompaniya nomi *</label>
+            <input type="text" name="company_name" required placeholder='Masalan: "Nur-Tech" MChJ'
+                style="width:100%; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:15px;">
+        </div>
+
+        <div style="margin-bottom:18px;">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">INN (STIR) *</label>
+            <input type="text" name="company_inn" required placeholder="123456789"
+                style="width:100%; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:15px;">
+        </div>
+
+        <div style="margin-bottom:18px;">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">Kompaniya faoliyati *</label>
+            <textarea name="company_activity" required rows="3"
+                placeholder="Masalan: IT xizmatlar, kompyuter ta'minoti, dasturiy ta'minot ishlab chiqarish"
+                style="width:100%; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:15px; resize:vertical;"></textarea>
+        </div>
+
+        <div style="margin-bottom:28px;">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">Tajriba *</label>
+            <textarea name="company_experience" required rows="3"
+                placeholder="Masalan: 2018 yildan beri IT sohasida faoliyat yuritamiz. 50+ davlat tashkiloti bilan ishlagan tajribamiz bor."
+                style="width:100%; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:15px; resize:vertical;"></textarea>
+        </div>
+
+        <h3 style="margin-bottom:16px; color:#333; border-bottom:2px solid #eef0f4; padding-bottom:8px;">
+            Tender ma'lumotlari
+        </h3>
+
+        <div style="margin-bottom:18px;">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">Tender linki *</label>
+            <input type="url" name="tender_url" required placeholder="https://xarid.uzex.uz/purchase/..."
+                style="width:100%; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:15px;">
+            <small style="color:#888; margin-top:4px; display:block;">xarid.uzex.uz saytidan tender sahifasining linkini nusxalab yozing</small>
+        </div>
+
+        <div style="margin-bottom:28px;">
+            <label style="display:block; font-weight:600; margin-bottom:6px;">Narx taklifingiz *</label>
+            <input type="text" name="price_offer" required placeholder="Masalan: 45,500,000 so'm (QQSiz)"
+                style="width:100%; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:15px;">
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn" style="width:100%; font-size:17px; padding:14px;">
+            AI hujjat yozsin →
+        </button>
+    </form>
+</div>
+
+<script>
+const messages = [
+    "Tender ma'lumotlari o'qilmoqda...",
+    "AI hujjat tuzilmasini tayyorlamoqda...",
+    "Professional ariza yozilyapti...",
+    "Deyarli tayyor, biroz kuting..."
+];
+let msgIndex = 0;
+
+document.getElementById("tender-form").addEventListener("submit", function() {
+    const overlay = document.getElementById("loading-overlay");
+    overlay.style.display = "flex";
+
+    document.getElementById("submit-btn").disabled = true;
+
+    setInterval(function() {
+        msgIndex = (msgIndex + 1) % messages.length;
+        document.getElementById("loading-msg").textContent = messages[msgIndex];
+    }, 4000);
+});
+</script>
+
+{% endblock %}

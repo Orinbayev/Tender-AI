@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TenderAI.uz{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; color: #333; }
+        nav {
+            background: #1a56db;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        nav .logo { color: white; font-size: 22px; font-weight: 700; text-decoration: none; }
+        nav a { color: #c7d8ff; text-decoration: none; font-size: 15px; }
+        .container { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+        .btn {
+            display: inline-block;
+            background: #1a56db;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .btn:hover { background: #1646c0; }
+        .btn-green { background: #057a55; }
+        .btn-green:hover { background: #046c4c; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="logo">TenderAI.uz</a>
+        <a href="/create/">Ariza yaratish</a>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

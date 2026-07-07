@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Tayyor hujjat — TenderAI.uz{% endblock %}
+
+{% block content %}
+<style>
+    .doc h1 { font-size:22px; color:#1a56db; border-bottom:2px solid #1a56db; padding-bottom:6px; margin:20px 0 10px; }
+    .doc h2 { font-size:18px; color:#1a56db; border-bottom:1px solid #c7d8ff; padding-bottom:4px; margin:18px 0 8px; }
+    .doc h3 { font-size:15px; color:#333; margin:14px 0 6px; }
+    .doc p { margin:8px 0; line-height:1.8; }
+    .doc ul, .doc ol { margin:6px 0 6px 22px; }
+    .doc li { margin:4px 0; line-height:1.7; }
+    .doc blockquote { border-left:3px solid #1a56db; margin:10px 0; padding:8px 14px; background:#f0f4ff; color:#333; border-radius:4px; }
+    .doc table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
+    .doc table th { background:#1a56db; color:white; padding:10px 12px; text-align:left; }
+    .doc table td { padding:8px 12px; border:1px solid #dde3f0; }
+    .doc table tr:nth-child(even) td { background:#f4f6ff; }
+    .doc strong { color:#111; }
+    .doc hr { border:none; border-top:2px solid #eef0f4; margin:20px 0; }
+    .doc pre { background:#f4f4f4; padding:12px; border-radius:6px; font-size:13px; overflow-x:auto; }
+    .doc code { background:#f0f0f0; padding:2px 6px; border-radius:3px; font-size:13px; }
+</style>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+    <div>
+        <h2 style="color:#057a55; margin-bottom:4px;">✓ Hujjat tayyor!</h2>
+        <p style="color:#666; margin:0;">{{ order.company_name }} — {{ order.tender_title|truncatechars:60 }}</p>
+    </div>
+    <a href="/download/{{ order.id }}/" class="btn btn-green">PDF yuklab olish</a>
+</div>
+
+{% if order.status == "error" %}
+<div style="background:#fef2f2; border:1px solid #fca5a5; border-radius:8px; padding:16px; margin-bottom:20px; color:#b91c1c;">
+    Xatolik yuz berdi. Claude API kalitini tekshiring.
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="doc">
+        {{ document_html }}
+    </div>
+</div>
+
+<div style="text-align:center; margin-top:24px;">
+    <a href="/create/" style="color:#1a56db; text-decoration:none; font-size:15px;">+ Yangi hujjat yaratish</a>
+</div>
+
+{% endblock %}
